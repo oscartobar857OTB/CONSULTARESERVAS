@@ -59,7 +59,7 @@ const db = getFirestore(app);
 
 // Función para cargar reservas
 async function cargarReservas() {
-    const querySnapshot = await getDocs(collection(db, "reservas"));
+    const querySnapshot = await getDocs(collection(db, "numeros"));
     let datos = [];
     querySnapshot.forEach((doc) => {
         let data = doc.data();
@@ -96,3 +96,4 @@ cargarReservas();
 
 </body>
 </html>
+
