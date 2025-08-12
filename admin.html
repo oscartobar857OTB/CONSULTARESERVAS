@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administración - Reservas Rifa</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<h1>📋 Administración de Reservas</h1>
+<table id="tablaReservas" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Número Reservado</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+// 🔹 Configuración Firebase (la tuya)
+const firebaseConfig = {
+  apiKey: "AIzaSyDo3cgRT87JQkV9kgJG2mrPnUkb5HugH9Q",
+  authDomain: "rifasammuel.firebaseapp.com",
+  projectId: "rifasammuel",
+  storageBucket: "rifasammuel.firebasestorage.app",
+  messagingSenderId: "707645550462",
+  appId: "1:707645550462:web:42735685340fb79e5d8d2f",
+  measurementId: "G-W3HY4MHHV4"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Función para cargar reservas
+async function cargarReservas() {
+    const querySnapshot = await getDocs(collection(db, "reservas"));
+    let datos = [];
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        datos.push([
+            data.nombre || '',
+            data.telefono || '',
+            data.email || '',
+            data.numero || '',
+            data.fecha || ''
+        ]);
+    });
+
+    $('#tablaReservas').DataTable({
+        data: datos,
+        columns: [
+            { title: "Nombre" },
+            { title: "Teléfono" },
+            { title: "Email" },
+            { title: "Número Reservado" },
+            { title: "Fecha" }
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+        }
+    });
+}
+
+cargarReservas();
+</script>
+
+</body>
+</html>
