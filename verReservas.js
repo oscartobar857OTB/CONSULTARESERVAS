@@ -18,10 +18,11 @@ const db = getFirestore(app);
 
 // Función para obtener reservas
 async function obtenerReservas() {
-  const querySnapshot = await getDocs(collection(db, "reservas"));
+  const querySnapshot = await getDocs(collection(db, "numeros"));
   querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
   });
 }
 
 obtenerReservas();
+
